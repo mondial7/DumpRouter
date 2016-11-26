@@ -94,6 +94,11 @@
 		private static $routes = [];
 
 		/**
+		 * Declare an empty array "no routes" to store paths that require normal behaviour
+		 */
+		private static $no_routes = [];
+
+		/**
 		 * Set default controller
 		 */
 		public static function setDefaultController($value){
@@ -105,6 +110,13 @@
 		 */
 		public static function setControllersExtension($value){
 			self::$controllers_ext = $value;
+		}
+
+		/**
+		 * Set paths that require normal behaviour
+		 */
+		public static function noRoute($path_segment){
+			self::$no_routes[] = $path_segment;
 		}
 
 		/**
@@ -147,7 +159,26 @@
 			$path = self::parseUriSegments($uri['path']);
 
 			$controller_name = null;
+			$file_not_found__controller = $controllers_dir.self::$default_controller;
 
+			// Check if normal behaviour is mandatory
+			foreach (self::$no_routes as $std_path) {
+				if ($path[0] == $std_path){
+
+					$target = $_SERVER['REQUEST_URI'];
+
+					if ( file_exists($target) ) {
+						require $target;
+					} else {
+						require $file_not_found__controller;
+					}
+
+					exit;
+
+				}
+			}
+
+			// Check for path/route match
 			foreach (self::$routes as $route_segment => $route_data) {
 
 				if ($path[0] == $route_segment) {
@@ -172,7 +203,7 @@
 			// Default controller if none has been match
 			// or if controller file not exists
 			if (empty($controller_name) || !file_exists($controller)) {
-				$controller = $controllers_dir.self::$default_controller;
+				$controller = $file_not_found__controller;
 			}
 
 			// Require the controller

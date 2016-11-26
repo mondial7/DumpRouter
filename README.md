@@ -41,6 +41,15 @@ Dump_Router::route('product',[
 ])
 ```
 
+### Define no routes --> paths that require normal behavoiur
+
+
+```php
+// http://example.com/app/###### will be loaded as normal url
+Dump_Router::noRoute('app');
+
+// Hint: you can do it with .htaccess buddy!
+```
 
 ### Trigger Router
 
