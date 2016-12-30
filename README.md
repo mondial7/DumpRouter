@@ -1,5 +1,5 @@
 # DumpRouter
-php routing class that handles get parameters and 'pretty urls', thought for MVC pattern
+Php routing class that handles get parameters and 'pretty urls' - Front controller pattern
 
 
 ## How to example
@@ -72,3 +72,6 @@ Dump_Router::route('/',[
 
 Dump_Router::render($_SERVER['REQUEST_URI']);
 ```
+
+
+P.s. Do not forget to redirect all the request a single index.php ( [.htaccess](https://github.com/mondial7/DumpRouter/blob/master/.htaccess) )
