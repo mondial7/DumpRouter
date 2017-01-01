@@ -145,9 +145,25 @@
 
 		/**
 		 * Evaluate URI and include the right controller
+		 *
+		 * @return void
+		 *
 		 */
 		public static function render($uri, $controllers_dir = null) {
 			
+			// Require the controller
+			require_once self::loadController($uri, $controllers_dir);
+
+		}
+
+		/**
+		 * Load the controller
+		 *
+		 * @return string controller
+		 *
+		 */
+		public static function loadController($uri, $controllers_dir = null) {
+
 			// Set the controllers dir
 			if ($controllers_dir === null) {
 				$controllers_dir = self::$controllers_dir;
@@ -206,8 +222,7 @@
 				$controller = $file_not_found__controller;
 			}
 
-			// Require the controller
-			require_once $controller;
+			return $controller;
 
 		}
 
