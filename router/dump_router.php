@@ -184,9 +184,9 @@
 					$target = $_SERVER['REQUEST_URI'];
 
 					if ( file_exists($target) ) {
-						require $target;
+						return $target;
 					} else {
-						require $file_not_found__controller;
+						return $file_not_found__controller;
 					}
 
 					exit;
