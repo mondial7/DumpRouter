@@ -1,70 +1,5 @@
 <?php
 
-	/*
-    	USAGE EXAMPLE
-
-		
-        require 'dump_router.php';	
-		
-
-		// OPTIONAL SETTINGS
-
-	    // Optional
-	    Dump_Router::setControllersExtension('.your_controller_extension'); // Default is ".php"
-	  
-	    // Optional
-	    Dump_Router::setDeaultController('not_found.php'); // Default is "404.php"
-
-
-
-		// SET ROUTES
-
-	    // Second parameter is optional except for the home/landing
-	    Dump_Router::route('/',[
-		  'controller' => "landing"
-		]);
-
-	    Dump_Router::route('about'); // Default controller name is the path segment name
-
-	    Dump_Router::manyRoute(['about','login','register']); // Set as multiple routes as the command above
-	    
-	    Dump_Router::route('shop', [
-	      'pretty_parameters' => ['category', 'product'] // Optional
-	    ]);
-
-	    Dump_Router::route('product',[
-	      'controller' => "product_box" // Custom controller, to specify different controller name
-	    ])
-	    
-	    
-
-		// TRIGGER ROUTER
-
-	    // Second parameter is optional
-	    Dump_Router::render($_SERVER['REQUEST_URI']);
-	    
-	    Dump_Router::render($_SERVER['REQUEST_URI'], $controllers_directory_path); // Default dir is "./app/controllers/"
-
-
-	  */
-
-
-
-	  /*
-		
-		MINIMAL EXAMPLE
-
-		require 'dump_router.php';
-
-		Dump_Router::route('/',[
-		  'controller' => "landing"
-		]);
-
-		Dump_Router::render($_SERVER['REQUEST_URI']);
-
-	  */
-	
-
 	/**
 	* Dump Router class
 	* Evaluate uri and load the right controller with a switch based on path segments
@@ -181,7 +116,7 @@
 			foreach (self::$no_routes as $std_path) {
 				if ($path[0] == $std_path){
 
-					$target = $_SERVER['REQUEST_URI'];
+					$target = implode("/", $path);;
 
 					if ( file_exists($target) ) {
 						return $target;
