@@ -118,7 +118,7 @@
 
 					$target = implode("/", $path);;
 
-					if ( file_exists($target) ) {
+					if ( file_exists($target) && !is_dir($target) ) {
 						return $target;
 					} else {
 						return $file_not_found__controller;
