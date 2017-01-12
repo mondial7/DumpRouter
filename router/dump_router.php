@@ -2,62 +2,100 @@
 
 	/**
 	* Dump Router class
+	*
 	* Evaluate uri and load the right controller with a switch based on path segments
-	* @public methods: route(), render(), manyRoute(), setDefaultController(), setControllersExtension()
+	*
+	* Public Methods: route(), noRoute(), manyRoute(),
+	*                 render(), loadController(),
+	*                 setDefaultController(), setControllersExtension()
+	*
 	*/
 	class Dump_Router {
 		
 		/**
 		 * Controllers dir
+		 *
+		 * @var string
+		 *
 		 */
 		private static $controllers_dir = "./app/controllers/";
 
 		/**
 		 * Default controller file extension
+		 *
+		 * @var string
+		 *
 		 */
 		private static $controllers_ext = ".php";
 
 		/**
 		 * Set here a deafult controller to load in case of errors
+		 *
+		 * @var string
+		 *
 		 */
 		private static $default_controller = "404.php";
 		private static $default_error_message = "Ops, nothing is here!";
 
 		/**
 		 * Declare an empty array "routes" to store all the routes paths
+		 *
+		 * @var array [string]
+		 *
 		 */
 		private static $routes = [];
 
 		/**
 		 * Declare an empty array "no routes" to store paths that require normal behaviour
+		 *
+		 * @var array [string]
+		 *
 		 */
 		private static $no_routes = [];
 
 		/**
 		 * Set default controller
+		 *
+		 * @param string
+		 * @return void
+		 *
 		 */
-		public static function setDefaultController($value){
+		public static function setDefaultController($value) {
 			self::$default_controller = $value;
 		}
 
 		/**
 		 * Set default controller
+		 *
+		 * @param string
+		 * @return void
+		 *
 		 */
-		public static function setControllersExtension($value){
+		public static function setControllersExtension($value) {
 			self::$controllers_ext = $value;
 		}
 
 		/**
 		 * Set paths that require normal behaviour
+		 *
+		 * @param string
+		 * @return void
+		 *
 		 */
-		public static function noRoute($path_segment){
+		public static function noRoute($path_segment) {
 			self::$no_routes[] = $path_segment;
 		}
 
 		/**
 		 * Add new route to the collection
+		 *
+		 * @param string
+		 * @param array (optional)
+		 * @return void
+		 *
 		 */
 		public static function route($path_segment, $route_data = null) {
+			
 			// When route_data is not specified, 
 		    // use the same path_segment as controller name
 		    if ($route_data === null) {
@@ -67,20 +105,29 @@
 		    }
 			// Store the new route
 			self::$routes[$path_segment] = $route_data;
+
 		}
 
 		/**
 		 * Set multiple simple route
+		 * 
+		 * @param array [string]
+		 * @return void
+		 *
 		 */
 		public static function manyRoute($routes_arr) {
+			
 			foreach ($routes_arr as $route) {
 				self::route($route);
 			}
+
 		}
 
 		/**
 		 * Evaluate URI and include the right controller
 		 *
+		 * @param string
+		 * @param string (optional)
 		 * @return void
 		 *
 		 */
@@ -94,6 +141,8 @@
 		/**
 		 * Load the controller
 		 *
+		 * @param string
+		 * @param string (optional)
 		 * @return string controller
 		 *
 		 */
@@ -110,7 +159,7 @@
 			$path = self::parseUriSegments($uri['path']);
 
 			$controller_name = null;
-			$file_not_found__controller = $controllers_dir.self::$default_controller;
+			$file_not_found__controller = $controllers_dir . self::$default_controller;
 
 			// Check if normal behaviour is mandatory
 			foreach (self::$no_routes as $std_path) {
@@ -164,6 +213,10 @@
 		/**
 		 * Parse URI
 		 * return array with path and optional get parameters
+		 *
+		 * @param string
+		 * @return array [ uri path, uri parameters ]
+		 *
 		 */
 		private static function parseUriPath($uri) {
 
@@ -188,6 +241,10 @@
 
 		/**
 		 * Return an array with uri segments
+		 *
+		 * @param string
+		 * @return string
+		 *
 		 */
 		private static function parseUriSegments($uri) {
 			
@@ -212,6 +269,10 @@
 
 		/**
 		 * Parse get parameters string and store in the $_GET array
+		 *
+		 * @param string
+		 * @return void
+		 *
 		 */
 		private static function setGetParameters($parameters_str){
 			
@@ -231,6 +292,11 @@
 		 * Handle Pretty urls
 		 * Parse segments of the uri path after the first
 		 * and convert them in get parameters as define in the route
+		 *
+		 * @param string
+		 * @param string
+		 * @return void
+		 *
 		 */
 		private static function setExtraGetParameters($parameters_arr, $path_arr){
 
