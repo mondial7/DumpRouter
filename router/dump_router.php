@@ -155,27 +155,26 @@
 
 			// @string uri to @array with 'path' and 'parameters'
 			$uri = self::parseUriPath($uri);
+
 			// @array of path segments
-			$path = self::parseUriSegments($uri['path']);
+			$path = self::parseUriSegments($uri);
 
 			$controller_name = null;
 			$file_not_found__controller = $controllers_dir . self::$default_controller;
 
 			// Check if normal behaviour is mandatory
 			foreach (self::$no_routes as $std_path) {
+				
 				if ($path[0] == $std_path){
 
-					$target = implode("/", $path);;
-
-					if ( file_exists($target) && !is_dir($target) ) {
-						return $target;
+					if ( file_exists($uri) && !is_dir($uri) ) {
+						return $uri;
 					} else {
 						return $file_not_found__controller;
 					}
 
-					exit;
-
 				}
+
 			}
 
 			// Check for path/route match
@@ -184,8 +183,6 @@
 				if ($path[0] == $route_segment) {
 					
 					$controller_name = $route_data['controller'];
-					// Set parameters in the $_GET array
-					self::setGetParameters($uri['parameters']);
 					// Set extra get parameters --> handle pretty url like '/category/product/'
 					if (isset($route_data['pretty_parameters']) && 
 						$route_data['pretty_parameters'] !== null) {
@@ -224,18 +221,14 @@
 			$basepath = implode('/', array_slice(explode('/', $_SERVER['SCRIPT_NAME']), 0, -1)) . '/';
 			// Remove base from uri string
 			$uri = substr($uri, strlen($basepath));
-			// Save optional get parameters
-			if (strstr($uri, '?')){
-				$uri_paramters = substr($uri, strpos($uri, '?')+1);
-				// Remove parameters from uri
+			// Remove parameters from uri
+			if (strstr($uri, '?')) {
 				$uri = substr($uri, 0, strpos($uri, '?'));
-			} else {
-				$uri_paramters = "";
 			}
 			// Clean the uri path (usefull for parseUriSegments)
 			$uri_path = '/' . trim($uri, '/');
 
-			return ['path' => $uri_path, 'parameters' => $uri_paramters];
+			return $uri_path;
 
 		}
 
@@ -268,27 +261,6 @@
 		}
 
 		/**
-		 * Parse get parameters string and store in the $_GET array
-		 *
-		 * @param string
-		 * @return void
-		 *
-		 */
-		private static function setGetParameters($parameters_str){
-			
-			$parameters_arr = explode("&", $parameters_str);
-
-			foreach ($parameters_arr as $parameter_str) {
-				
-				$parameter_arr = explode("=", $parameter_str);
-	
-				$_GET[$parameter_arr[0]] = isset($parameter_arr[1]) ? $parameter_arr[1] : "";
-
-			}
-
-		}
-
-		/**
 		 * Handle Pretty urls
 		 * Parse segments of the uri path after the first
 		 * and convert them in get parameters as define in the route
@@ -315,5 +287,3 @@
 		}
 
 	}
-
-?>
