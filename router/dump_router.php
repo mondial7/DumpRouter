@@ -167,6 +167,9 @@
 				
 				if ($path[0] == $std_path){
 
+					// clena uri (avoid relative path failures)
+					$uri = trim($uri, '/');
+
 					if ( file_exists($uri) && !is_dir($uri) ) {
 						return $uri;
 					} else {
