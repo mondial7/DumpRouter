@@ -2,6 +2,9 @@
 Php routing class that handles get parameters and 'pretty urls' - Front controller pattern
 
 
+application example: [findmyplace](https://github.com/mondial7/findmyplace)
+
+
 ## How to example
 
 ```php
